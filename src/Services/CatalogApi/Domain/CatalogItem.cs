@@ -10,7 +10,7 @@ namespace CatalogApi.Domain
 
         public decimal Price { get; set; }
 
-        public string PriceFullName{ get; set; }
+        public string PictureFileName{ get; set; }
 
         public int CatalogTypeId { get; set; }
 

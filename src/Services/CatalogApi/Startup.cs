@@ -28,7 +28,22 @@ namespace CatalogApi
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
-            services.AddDbContext<CatalogContext>(options=>options.UseSqlServer(Configuration.GetConnectionString("CatalogDb")));
+            services.Configure<CatalogSettings>(Configuration);
+            services.AddDbContext<CatalogContext>(options =>
+                options.UseSqlServer(
+                    $"Server={Configuration["DatabaseServer"]};Database={Configuration["DatabaseName"]};User={Configuration["DatabaseUser"]};Password={Configuration["DatabasePassword"]};;Trusted_Connection=True;Integrated Security=False;"
+                    ),
+                ServiceLifetime.Scoped
+                );
+            services.AddSwaggerGen(options =>
+            {
+                options.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo
+                {
+                    Version = "v1",
+                    Title = "Catalog API",
+                    Description = "Catalog apis"
+                });
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -40,7 +55,11 @@ namespace CatalogApi
             }
 
             app.UseHttpsRedirection();
-
+            app.UseSwagger()
+                .UseSwaggerUI(x =>
+                {
+                    x.SwaggerEndpoint($"/swagger/v1/swagger.json", "CatalogAPI V1");
+                });
             app.UseRouting();
 
             app.UseAuthorization();

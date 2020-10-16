@@ -3,14 +3,16 @@ using CatalogApi.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace CatalogApi.Migrations
 {
     [DbContext(typeof(CatalogContext))]
-    partial class CatalogContextModelSnapshot : ModelSnapshot
+    [Migration("20201016032347_update CatalogItem pricefullname to picturefill name")]
+    partial class updateCatalogItempricefullnametopicturefillname
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

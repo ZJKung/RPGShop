@@ -1,0 +1,38 @@
+version: "3.4"
+
+networks:
+  backend:
+    driver: bridge
+  frontend:
+
+services:
+  mssqlserver:
+    image: "microsoft/mssql-server-linux:latest"
+    ports:
+      - "1488:1433"
+    container_name: rpgmssqlcontainer
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=!QAZ2wsx
+    networks:
+      - backend
+
+  catalog:
+    build:
+      context: .\src\Services\CatalogApi
+      dockerfile: Dockerfile
+    image: rpgshop/catalog
+    environment:
+      - DatabaseServer=mssqlserver
+      - DatabaseName=CatalogDb
+      - DatabaseUser=sa
+      - DatabasePassword=!QAZ2wsx
+      - ExternalCatalogBaseUrl=http://${RPGSHOP_EXTERNAL_DNS_NAME_OR_IP}:8888
+    container_name: rpgcatalogapi
+    ports:
+      - "8888:80"
+    networks:
+      - backend
+      - frontend
+    depends_on:
+      - mssqlserver
