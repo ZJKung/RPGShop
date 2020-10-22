@@ -1,4 +1,6 @@
 .vscode
-src/Services/CatalogApi/.vs
-src/Services/CatalogApi/obj
-src/Services/CatalogApi/bin
+.vs
+obj
+bin
+
+appsettings.Development.json
