@@ -12,6 +12,11 @@ a {
   color: #0366d6;
 }
 
+.is-disabled {
+  opacity: .5;
+  pointer-events: none;
+}
+
 .btn-primary {
   color: #fff;
   background-color: #1b6ec2;

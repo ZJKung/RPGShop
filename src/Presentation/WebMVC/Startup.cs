@@ -8,6 +8,8 @@ using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using WebMVC.Infrastructure;
+using WebMVC.Services;
 
 namespace WebMVC
 {
@@ -23,6 +25,11 @@ namespace WebMVC
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            //services.AddSingleton<IHttpClient,CustomHttpClient>();
+            services.Configure<AppSettings>(Configuration);
+            services.AddHttpClient<CustomHttpClient>();
+            services.AddSingleton<CustomHttpClient>();
+            services.AddTransient<ICatalogService, CatalogService>();
             services.AddControllersWithViews();
         }
 

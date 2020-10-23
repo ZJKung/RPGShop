@@ -36,3 +36,16 @@ services:
       - frontend
     depends_on:
       - mssqlserver
+  webmvc:
+    build:
+      context: .\src\Presentation\WebMVC
+      dockerfile: Dockerfile
+    environment:
+       - CatalogUrl=http://catalog
+    container_name: rpgwebmvc
+    ports:
+       - "7500:80"
+    networks:
+       - frontend
+    depends_on:
+       - catalog
