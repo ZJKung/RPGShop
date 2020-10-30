@@ -1,17 +1,14 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using AuthApi.Data;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.EntityFrameworkCore;
 using AuthApi.Models;
 using Microsoft.AspNetCore.Identity;
+using TokenServiceApi;
+using Microsoft.AspNetCore.Http;
 
 namespace AuthApi
 {
@@ -27,13 +24,13 @@ namespace AuthApi
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllersWithViews();
             services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(
                 $"Server={Configuration["DatabaseServer"]};Database={Configuration["DatabaseName"]};User={Configuration["DatabaseUser"]};Password={Configuration["DatabasePassword"]};;Trusted_Connection=True;Integrated Security=False;")
                 );
             services.AddIdentity<ApplicationUser, IdentityRole>()
                     .AddEntityFrameworkStores<ApplicationDbContext>()
                     .AddDefaultTokenProviders();
+            services.AddControllersWithViews();
             services.AddRazorPages();
             var builder = services.AddIdentityServer(options =>
                 {
@@ -60,6 +57,7 @@ namespace AuthApi
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+                app.UseDatabaseErrorPage();
             }
             else
             {
@@ -69,9 +67,14 @@ namespace AuthApi
             }
             app.UseHttpsRedirection();
             app.UseStaticFiles();
+            app.UseCookiePolicy(new CookiePolicyOptions()
+            {
+                MinimumSameSitePolicy = SameSiteMode.Lax
+            });
 
             app.UseRouting();
-
+            app.UseIdentityServer();
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>

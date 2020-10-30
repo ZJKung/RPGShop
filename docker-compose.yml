@@ -49,3 +49,28 @@ services:
        - frontend
     depends_on:
        - catalog
+  auth:
+    build:
+      context: .\src\Services\AuthApi
+      dockerfile: Dockerfile
+    image: rpgshop/auth
+    environment:
+      - MvcClient=http://${RPGSHOP_EXTERNAL_DNS_NAME_OR_IP}:7500
+      - DatabaseServer=mssqlserver
+      - DatabaseName=AuthDb
+      - DatabaseUser=sa
+      - DatabasePassword=!QAZ2wsx
+      - ExternalCatalogBaseUrl=http://${RPGSHOP_EXTERNAL_DNS_NAME_OR_IP}:7000
+      - ASPNETCORE_URLS=http://+:80;https://+:443
+      - ASPNETCORE_Kestrel__Certificates__Default__Password=crypticpassword
+      - ASPNETCORE_Kestrel__Certificates__Default__Path=./AuthApi.pfx
+    container_name: rpgauthapi
+    ports:
+      - "7100:80"
+      - "7101:443"
+    networks:
+      - backend
+      - frontend
+    depends_on:
+      - mssqlserver
+    

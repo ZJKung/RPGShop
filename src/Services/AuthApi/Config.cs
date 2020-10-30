@@ -2,7 +2,7 @@ using IdentityServer4;
 using IdentityServer4.Models;
 using Microsoft.Extensions.Configuration;
 using System.Collections.Generic;
-namespace AuthApi
+namespace TokenServiceApi
 {
     public class Config
     {

@@ -18,7 +18,7 @@
     "WebMVC": {
       "commandName": "Project",
       "launchBrowser": true,
-      "applicationUrl": "https://localhost:1234;http://localhost:5678",
+      "applicationUrl": "https://localhost:12345;http://localhost:56789",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
