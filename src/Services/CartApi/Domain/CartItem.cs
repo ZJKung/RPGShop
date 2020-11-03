@@ -1,4 +1,4 @@
-namespace CatalogApi.Domain
+namespace CartApi.Domain
 {
     public class CartItem
     {

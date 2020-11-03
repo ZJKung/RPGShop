@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace CatalogApi.Interfaces
+namespace CartApi.Interfaces
 {
     public interface IGenericRepository<T> where T :class
     {

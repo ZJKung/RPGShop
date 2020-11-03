@@ -1,13 +1,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using CatalogApi.Domain;
-using CatalogApi.Interfaces;
+using CartApi.Domain;
+using CartApi.Interfaces;
 using Microsoft.Extensions.Logging;
 using StackExchange.Redis;
 using System.Text.Json;
 
-namespace CatalogApi.Repositories
+namespace CartApi.Repositories
 {
     public class CartRepository : ICartRepository
     {

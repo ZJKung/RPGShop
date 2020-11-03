@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using CatalogApi.Data;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -11,10 +10,15 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using Microsoft.EntityFrameworkCore;
-using Newtonsoft.Json;
+using CartApi.Infrastructure.Filters;
+using StackExchange.Redis;
+using Microsoft.Extensions.Options;
+using CartApi.Interfaces;
+using CartApi.Repositories;
+using Microsoft.AspNetCore.Http;
+using CartApi.Domain;
 
-namespace CatalogApi
+namespace CartApi
 {
     public class Startup
     {
@@ -28,20 +32,34 @@ namespace CatalogApi
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.Configure<CatalogSettings>(Configuration);
-            services.AddDbContext<CatalogContext>(options =>
-                options.UseSqlServer(
-                    $"Server={Configuration["DatabaseServer"]};Database={Configuration["DatabaseName"]};User={Configuration["DatabaseUser"]};Password={Configuration["DatabasePassword"]};;Trusted_Connection=True;Integrated Security=False;"
-                    ),
-                ServiceLifetime.Scoped
-                );
+            services.AddControllers(options =>
+            {
+                options.Filters.Add(typeof(HttpGlobalExceptionFilter));
+            }).AddNewtonsoftJson(options =>
+            {
+                options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
+            });
+            services.Configure<CartSettings>(Configuration);
+            services.AddSingleton<ConnectionMultiplexer>(sp =>
+            {
+                var settings = sp.GetRequiredService<IOptions<CartSettings>>().Value;
+                var configuration = ConfigurationOptions.Parse(settings.ConnectionString, true);
+
+                configuration.ResolveDns = true;
+                configuration.AbortOnConnectFail = false;
+
+                return ConnectionMultiplexer.Connect(configuration);
+            });
+            services.AddTransient<ICartRepository, CartRepository>();
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+
             services.AddSwaggerGen(options =>
             {
                 options.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo
                 {
                     Version = "v1",
-                    Title = "Catalog API",
-                    Description = "Catalog apis"
+                    Title = "Cart API",
+                    Description = "Cart apis"
                 });
             });
         }
@@ -55,11 +73,10 @@ namespace CatalogApi
             }
 
             app.UseHttpsRedirection();
-            app.UseSwagger()
-                .UseSwaggerUI(x =>
-                {
-                    x.SwaggerEndpoint($"/swagger/v1/swagger.json", "CatalogAPI V1");
-                });
+            app.UseSwagger().UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint($"/swagger/v1/swagger.json", "Cart.API V1");
+            });
             app.UseRouting();
 
             app.UseAuthorization();

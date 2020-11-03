@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace CatalogApi.Domain
+namespace CartApi.Domain
 {
     public class Cart
     {

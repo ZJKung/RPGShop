@@ -36,19 +36,21 @@ services:
       - frontend
     depends_on:
       - mssqlserver
+      - redis
   webmvc:
     build:
       context: .\src\Presentation\WebMVC
       dockerfile: Dockerfile
     environment:
-       - CatalogUrl=http://catalog
+      - CatalogUrl=http://catalog
     container_name: rpgwebmvc
     ports:
-       - "7500:80"
+      - "7500:80"
     networks:
-       - frontend
+      - frontend
     depends_on:
-       - catalog
+      - catalog
+      - auth
   auth:
     build:
       context: .\src\Services\AuthApi
@@ -73,4 +75,26 @@ services:
       - frontend
     depends_on:
       - mssqlserver
-    
+
+  cart:
+    build:
+      context: .\src\Services\CartApi
+      dockerfile: Dockerfile
+    image: rpgshop/cart
+    environment:
+      - ConnectionString=redis
+    container_name: rpgcartapi
+    ports:
+      - "7777:80"
+    networks:
+      - backend
+      - frontend
+    depends_on:
+      - redis
+
+  redis:
+    image: redis
+    ports:
+      - "6379:6379"
+    networks:
+      - backend
