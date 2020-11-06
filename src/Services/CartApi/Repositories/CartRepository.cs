@@ -5,7 +5,7 @@ using CartApi.Domain;
 using CartApi.Interfaces;
 using Microsoft.Extensions.Logging;
 using StackExchange.Redis;
-using System.Text.Json;
+using Newtonsoft.Json;
 
 namespace CartApi.Repositories
 {
@@ -40,12 +40,12 @@ namespace CartApi.Repositories
         {
             var data = await _database.StringGetAsync(id);
             if (data.IsNullOrEmpty) return null;
-            return JsonSerializer.Deserialize<Cart>(data);
+            return JsonConvert.DeserializeObject<Cart>(data);
         }
 
         public async Task<Cart> UpdateAsync(Cart entity)
         {
-            var created = await _database.StringSetAsync(entity.BuyerId, JsonSerializer.Serialize(entity));
+            var created = await _database.StringSetAsync(entity.BuyerId, JsonConvert.SerializeObject(entity));
             if (!created)
             {
                 _logger.LogInformation("Problem occur persisting the item");

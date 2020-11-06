@@ -9,8 +9,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CatalogApi.Migrations
 {
     [DbContext(typeof(CatalogContext))]
-    [Migration("20201016032347_update CatalogItem pricefullname to picturefill name")]
-    partial class updateCatalogItempricefullnametopicturefillname
+    [Migration("20201104091954_init")]
+    partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

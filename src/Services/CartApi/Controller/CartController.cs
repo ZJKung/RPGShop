@@ -2,11 +2,15 @@ using System.Net;
 using System.Threading.Tasks;
 using CartApi.Domain;
 using CartApi.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
 namespace CartApi.Controller
 {
+    [Authorize]
+    [ApiController]
+    [Route("api/[controller]")]
     public class CartController : ControllerBase
     {
         private readonly ILogger<CartController> _logger;

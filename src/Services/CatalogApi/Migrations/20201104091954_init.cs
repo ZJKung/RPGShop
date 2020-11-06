@@ -28,7 +28,7 @@ namespace CatalogApi.Migrations
                     Name = table.Column<string>(maxLength: 50, nullable: false),
                     Description = table.Column<string>(nullable: true),
                     Price = table.Column<decimal>(nullable: false),
-                    PriceFullName = table.Column<string>(nullable: true),
+                    PictureFileName = table.Column<string>(nullable: true),
                     CatalogTypeId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
