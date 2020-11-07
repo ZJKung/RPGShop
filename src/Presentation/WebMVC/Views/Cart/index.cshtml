@@ -1,0 +1,19 @@
+@using WebMVC.Services
+@using WebMVC.ViewModels
+
+@inject IAuthService<ApplicationUser> authService
+
+@{
+    ViewData["Title"] = "My Cart";
+}
+
+<form method="post" id="cartForm">
+    <div class="">
+        @await Html.PartialAsync("_Header", new List<Header>()
+        {
+        new Header(){Controller = "Catalog", Text = "Back to catalog"}
+        })
+
+        @await Component.InvokeAsync("CartList", new { user = authService.Get(User)})
+    </div>
+</form>

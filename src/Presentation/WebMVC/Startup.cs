@@ -15,6 +15,8 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Http;
 using System.Net.Http;
+using WebMVC.Models;
+using Newtonsoft.Json.Serialization;
 
 namespace WebMVC
 {
@@ -30,12 +32,19 @@ namespace WebMVC
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            //services.AddSingleton<IHttpClient,CustomHttpClient>();
             services.Configure<AppSettings>(Configuration);
-            services.AddHttpClient<CustomHttpClient>();
-            services.AddSingleton<CustomHttpClient>();
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            services.AddSingleton<IHttpClient, CustomHttpClient>();
             services.AddTransient<ICatalogService, CatalogService>();
-            services.AddControllersWithViews();
+            services.AddTransient<IAuthService<ApplicationUser>, AuthService>();
+            services.AddTransient<ICartService, CartService>();
+
+            services.AddControllersWithViews().AddNewtonsoftJson(options =>
+            {
+                options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+                options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
+            });
+
             JwtSecurityTokenHandler.DefaultMapInboundClaims = false;
 
             var identityUrl = Configuration.GetValue<string>("IdentityUrl");

@@ -13,11 +13,20 @@ namespace WebMVC.Infrastructure
     public class CustomHttpClient : IHttpClient
     {
         private HttpClient _client;
+
         private ILogger<CustomHttpClient> _logger;
 
         public CustomHttpClient(ILogger<CustomHttpClient> logger)
         {
-            _client = new HttpClient();
+            var handler = new HttpClientHandler();
+            handler.ClientCertificateOptions = ClientCertificateOption.Manual;
+            handler.ServerCertificateCustomValidationCallback =
+                (httpRequestMessage, cert, cetChain, policyErrors) =>
+             {
+                 return true;
+             };
+            //var client = new HttpClient(handler);
+            _client = new HttpClient(handler);
             _logger = logger;
         }
         public async Task<HttpResponseMessage> DeleteAsync(string uri, string authorizationToken = null, string authorizationMethod = "Bearer")

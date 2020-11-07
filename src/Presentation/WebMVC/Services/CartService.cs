@@ -112,6 +112,7 @@ namespace WebMVC.Services
 
             return cart;
         }
+
         private async Task<string> GetUserTokenAsync()
         {
             var context = _httpContextAccessor.HttpContext;

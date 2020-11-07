@@ -1,22 +1,5 @@
 namespace WebMVC.Infrastructure
 {
-    public static class Cart
-    {
-        public static string GetCart(string baseUri, string cartId)
-        {
-            return $"{baseUri}/{cartId}";
-        }
-
-        public static string UpdateCart(string baseUri)
-        {
-            return baseUri;
-        }
-
-        public static string CleanCart(string baseUri, string cartId)
-        {
-            return $"{baseUri}/{cartId}";
-        }
-    }
     public static class ApiPaths
     {
         public static class Catalog
@@ -37,5 +20,23 @@ namespace WebMVC.Infrastructure
             }
 
         }
+        public static class Cart
+        {
+            public static string GetCart(string baseUri, string cartId)
+            {
+                return $"{baseUri}/{cartId}";
+            }
+
+            public static string UpdateCart(string baseUri)
+            {
+                return baseUri;
+            }
+
+            public static string CleanCart(string baseUri, string cartId)
+            {
+                return $"{baseUri}/{cartId}";
+            }
+        }
+
     }
 }

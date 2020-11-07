@@ -26,17 +26,18 @@ namespace WebMVC.Controllers
             vm.Types = await _catalogService.GetTypes();
             vm.TypesFilterApplied = typesFilterApplied ?? 0;
             vm.PaginationInfo = new PaginationInfo();
-            vm.PaginationInfo.ActualPage=page ?? 0;
-            vm.PaginationInfo.ItemsPerPage=Math.Min(catalog.Count, itemsPage);
-            vm.PaginationInfo.TotalItems=catalog.Count;
-            vm.PaginationInfo.TotalPages=(int)Math.Ceiling((decimal)catalog.Count / itemsPage);
-            
+            vm.PaginationInfo.ActualPage = page ?? 0;
+            vm.PaginationInfo.ItemsPerPage = Math.Min(catalog.Count, itemsPage);
+            vm.PaginationInfo.TotalItems = catalog.Count;
+            vm.PaginationInfo.TotalPages = (int)Math.Ceiling((decimal)catalog.Count / itemsPage);
+
             vm.PaginationInfo.Next = (vm.PaginationInfo.ActualPage == vm.PaginationInfo.TotalPages - 1) ? "is-disabled" : "";
             vm.PaginationInfo.Previous = (vm.PaginationInfo.ActualPage == 0) ? "is-disabled" : "";
             ViewBag.TypesFilterApplied = typesFilterApplied;
 
             return View(vm);
         }
+        //todo imprement add to cart method
 
     }
 }

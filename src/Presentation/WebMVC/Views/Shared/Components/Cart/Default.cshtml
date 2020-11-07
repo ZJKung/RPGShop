@@ -1,0 +1,16 @@
+@model WebMVC.ViewModels.CartComponentViewModel
+
+@{
+    ViewData["Title"] = "My Cart";
+}
+
+<a class="@Model.Disabled" asp-area="" asp-controller="Cart" asp-action="Index">
+    @if (ViewBag.IsCartInoperative == true)
+    {
+        <p class="fa fa-2x fa-shopping-cart">X</p>
+    }
+    else
+    {
+        <p class="fa fa-2x fa-shopping-cart">@Model.ItemsInCart</p>
+    }
+</a>

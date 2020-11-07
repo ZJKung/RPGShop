@@ -6,23 +6,30 @@ using Microsoft.Extensions.Options;
 using WebMVC.Infrastructure;
 using WebMVC.Models;
 using System.Text.Json;
+using Microsoft.AspNetCore.Http;
 
 namespace WebMVC.Services
 {
     public class CatalogService : ICatalogService
     {
         private readonly IOptionsSnapshot<AppSettings> _settings;
-        private CustomHttpClient _apiClient;
+        // private CustomHttpClient _apiClient;
+        private readonly IHttpClient _apiClient;
+        private readonly IHttpContextAccessor _httpContextAccessor;
+
+
         private ILogger<CatalogService> _logger;
         private string _remoteServiceBaseUrl;
 
         public CatalogService(
             IOptionsSnapshot<AppSettings> settings,
-            CustomHttpClient apiClient,
+            IHttpClient httpClient,
+            IHttpContextAccessor httpContextAccessor,
             ILogger<CatalogService> logger)
         {
             _settings = settings;
-            _apiClient = apiClient;
+            _apiClient = httpClient;
+            _httpContextAccessor = httpContextAccessor;
             _logger = logger;
             _remoteServiceBaseUrl = $"{_settings.Value.CatalogUrl}/catalog/";
         }
