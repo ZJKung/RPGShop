@@ -18,15 +18,7 @@ namespace WebMVC.Infrastructure
 
         public CustomHttpClient(ILogger<CustomHttpClient> logger)
         {
-            var handler = new HttpClientHandler();
-            handler.ClientCertificateOptions = ClientCertificateOption.Manual;
-            handler.ServerCertificateCustomValidationCallback =
-                (httpRequestMessage, cert, cetChain, policyErrors) =>
-             {
-                 return true;
-             };
-            //var client = new HttpClient(handler);
-            _client = new HttpClient(handler);
+            _client = new HttpClient();
             _logger = logger;
         }
         public async Task<HttpResponseMessage> DeleteAsync(string uri, string authorizationToken = null, string authorizationMethod = "Bearer")

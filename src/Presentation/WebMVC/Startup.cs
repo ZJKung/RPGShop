@@ -69,6 +69,7 @@ namespace WebMVC
                 options.Scope.Add("openid");
                 options.Scope.Add("profile");
                 options.Scope.Add("offline_access");
+                options.Scope.Add("basket");
 
                 options.NonceCookie.SameSite = SameSiteMode.Lax;
                 options.CorrelationCookie.SameSite = SameSiteMode.Lax;

@@ -26,7 +26,7 @@ namespace WebMVC.Services
             IHttpContextAccessor httpContextAccessor)
         {
             _settings = settings;
-            _remoteServiceBaseUrl = $"{_settings.Value.CartUrl}/api/v1/cart";
+            _remoteServiceBaseUrl = $"{_settings.Value.CartUrl}/api/cart";
             _httpContextAccessor = httpContextAccessor;
             _apiClient = httpClient;
             _logger = logger;

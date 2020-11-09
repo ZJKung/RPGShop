@@ -20,7 +20,7 @@ namespace AuthApi.Data
 
             string user = "test@test.com";
             string password = "P@ssword1";
-            await userManager.CreateAsync(new ApplicationUser { UserName = user, EmailConfirmed = true }, password);
+            await userManager.CreateAsync(new ApplicationUser { UserName = user, EmailConfirmed = true}, password);
         }
     }
 }
