@@ -9,7 +9,7 @@ services:
   mssqlserver:
     image: "microsoft/mssql-server-linux:latest"
     ports:
-      - "1488:1433"
+      - "1477:1433"
     container_name: rpgmssqlcontainer
     environment:
       - ACCEPT_EULA=Y

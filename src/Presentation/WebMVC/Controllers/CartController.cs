@@ -41,11 +41,23 @@ namespace WebMVC.Controllers
             return View();
         }
         //todo add update cart action
-        public async Task<IActionResult> Index(Cart cartItem)
-        {            
-            await _cartService.UpdateCartAsync(cartItem);
+        [HttpPost]
+        public async Task<IActionResult> Index(Dictionary<string, int> quantities)
+        {
+            var user = _userManager.Get(User);
+            _logger.LogInformation($"Quanilies : {quantities.Keys} {quantities.Values}");
+            await _cartService.SetQuantitiesAsync(user, quantities);
             return View();
         }
+        [HttpPost]
+        public async Task<IActionResult> Checkout(Cart cart)
+        {
+            var user = _userManager.Get(User);
+            await _cartService.UpdateCartAsync(cart);
+            await _cartService.ClearCartAsync(user);
+            return RedirectToAction("Index");
+        }
+
 
 
     }
