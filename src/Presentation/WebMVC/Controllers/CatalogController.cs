@@ -2,6 +2,8 @@ using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using WebMVC.Models;
+using WebMVC.Models.CartModels;
 using WebMVC.Services;
 using WebMVC.ViewModels;
 
@@ -11,11 +13,18 @@ namespace WebMVC.Controllers
     {
         private ICatalogService _catalogService;
         private ILogger _logger;
+        private readonly ICartService _cartService;
+        private readonly IAuthService<ApplicationUser> _userManager;
         private readonly int itemsPage = 6;
-        public CatalogController(ICatalogService catalogService, ILogger<CatalogController> logger)
+        public CatalogController(ICatalogService catalogService,
+        ICartService cartService,
+        ILogger<CatalogController> logger,
+        IAuthService<ApplicationUser> userManager)
         {
             _catalogService = catalogService;
             _logger = logger;
+            _cartService = cartService;
+            _userManager = userManager;
         }
 
         public async Task<IActionResult> Index(int? typesFilterApplied, int? page)
@@ -37,7 +46,22 @@ namespace WebMVC.Controllers
 
             return View(vm);
         }
-        //todo imprement add to cart method
+
+        public async Task<IActionResult> AddToCart(CatalogItem catalog)
+        {
+            var user = _userManager.Get(User);
+            var product = new CartItem();
+            product.Id = catalog.Id.ToString();
+            product.ProductName = catalog.Name;
+            product.PictureUrl = catalog.PictureUrl;
+            product.UnitPrice = catalog.Price;
+
+
+
+            await _cartService.AddItemToCartAsync(user, product);
+            return View();
+        }
+
 
     }
 }
