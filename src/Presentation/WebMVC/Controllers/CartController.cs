@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -29,22 +30,46 @@ namespace WebMVC.Controllers
             var user = _userManager.Get(User);
             var product = new CartItem();
             product.Id = catalog.Id.ToString();
+            product.ProductId = catalog.Id.ToString();
             product.ProductName = catalog.Name;
             product.PictureUrl = catalog.PictureUrl;
             product.UnitPrice = catalog.Price;
+            product.Quantity = 1;
 
             await _cartService.AddItemToCartAsync(user, product);
             return RedirectToAction("Index");
         }
-        public IActionResult Index()
+        [HttpGet]
+        public async Task<IActionResult> Index()
         {
+            try
+            {
+                var user = _userManager.Get(User);
+                var vm = await _cartService.GetCartAsync(user);
+                return View(vm);
+            }
+            catch (Exception ex)
+            {
+                // TODO
+            }
             return View();
         }
         //todo add update cart action
-        public async Task<IActionResult> Index(Cart cartItem)
-        {            
-            await _cartService.UpdateCartAsync(cartItem);
+        [HttpPost]
+        public async Task<IActionResult> Index(Dictionary<string, int> quantities, string action)
+        {
+            try
+            {
+                var user = _userManager.Get(User);
+                await _cartService.SetQuantitiesAsync(user, quantities);
+
+            }
+            catch (Exception ex)
+            {
+                // TODO
+            }
             return View();
+
         }
 
 

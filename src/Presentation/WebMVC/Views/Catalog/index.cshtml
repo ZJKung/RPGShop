@@ -1,19 +1,21 @@
 @{
     ViewData["Title"] = "Catalog";
     @model WebMVC.ViewModels.CatalogViewModel
-}
 
-<form asp-action="Index" asp-controller="Catalog" method="post">
+}
+<div>
     <div class="row">
         <div class="col-md-3">
             <section class="nes-container with-title">
-                <h3 class="title">Types</h3>
-                <div id="lists" class="item">
-                    <div class="nes-select">
-                        <select asp-for="@Model.TypesFilterApplied" asp-items="@Model.Types"></select>
+                <form asp-action="Index" asp-controller="Catalog" method="post">
+                    <h3 class="title">Types</h3>
+                    <div id="lists" class="item">
+                        <div class="nes-select">
+                            <select asp-for="@Model.TypesFilterApplied" asp-items="@Model.Types"></select>
+                        </div>
+                        <button type="submit" class="nes-btn is-primary">Search</button>
                     </div>
-                    <button type="submit" class="nes-btn is-primary">Search</button>
-                </div>
+                </form>
             </section>
         </div>
         <!-- /.col -->
@@ -21,12 +23,15 @@
             <div class="row">
                 @if (Model.CatalogItems.Count() > 0)
                 {
+                    <partial name="_pagination" model="Model.PaginationInfo" />
                     <div class="row">
                         @foreach (var catalogItem in Model.CatalogItems)
                         {
                             <partial name="_product" model="catalogItem" />
                         }
                     </div>
+
+
                     <partial name="_pagination" model="Model.PaginationInfo" />
                 }
                 else
@@ -41,4 +46,4 @@
         <!-- /.col -->
     </div>
     <!-- /.row -->
-</form>
+</div>

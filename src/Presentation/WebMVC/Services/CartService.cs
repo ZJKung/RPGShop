@@ -33,8 +33,9 @@ namespace WebMVC.Services
         }
         public async Task AddItemToCartAsync(ApplicationUser user, CartItem product)
         {
-            var cart = await GetCartAsync(user);
+            Cart cart = await GetCartAsync(user);
             _logger.LogDebug("user name" + user.Id);
+            //if nothing in cart Create Cart
             if (cart == null)
             {
                 cart = new Models.CartModels.Cart()
@@ -97,8 +98,7 @@ namespace WebMVC.Services
                     x.Quantity = quantity;
                 }
             });
-
-            return cart;
+            return await UpdateCartAsync(cart);
         }
 
         public async Task<Cart> UpdateCartAsync(Cart cart)
@@ -109,8 +109,9 @@ namespace WebMVC.Services
             _logger.LogDebug("Update cart url: " + updateCartUri);
             var response = await _apiClient.PostAsync(updateCartUri, cart, token);
             response.EnsureSuccessStatusCode();
+            var jsonResponse = await response.Content.ReadAsStringAsync();
 
-            return cart;
+            return JsonConvert.DeserializeObject<Cart>(jsonResponse);
         }
 
         private async Task<string> GetUserTokenAsync()
