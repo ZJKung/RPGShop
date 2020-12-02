@@ -71,6 +71,15 @@ namespace WebMVC.Controllers
             return View();
 
         }
+        [HttpPost]
+        public async Task<IActionResult> Checkout(Cart cart)
+        {
+            var user = _userManager.Get(User);
+            await _cartService.UpdateCartAsync(cart);
+            await _cartService.ClearCartAsync(user);
+            return RedirectToAction("Index");
+        }
+
 
 
     }
